@@ -2,39 +2,47 @@
 <html lang="en">
 <head>
     <title>Booking Confirmation</title>
-	<meta charset="utf-8">
-	<meta name="description" content="Rohirrim Booking Form" >
-	<meta name="keywords"    content="MiddleEarth, Tours, Rohan" >
-	<meta name="author"      content="Grima Wormtongue" />
-    <!-- Place the general style sheet before specific CSS so the specific overides the general formatting-->
-	<link rel="stylesheet" type="text/css" href="style/style.css" >
-	<link rel="stylesheet" type="text/css" href="style/register.css" >	
+    <meta charset="utf-8">
+    <meta name="description" content="Rohirrim Booking Confirmation" >
+    <meta name="keywords"    content="MiddleEarth, Tours, Rohan" >
+    <meta name="author"      content="Grima Wormtongue" />
+    <link rel="stylesheet" type="text/css" href="style/style.css" >
+    <link rel="stylesheet" type="text/css" href="style/register.css" >    
 </head>
 
 <body>
-  <h1>Rohirrim Tour Booking Confirmation</h1>
-  <?php
+    <header><h1>Rohirrim Tour Booking Confirmation</h1></header>
+    <nav>
+        <ul>
+            <li><a href="construction.html">Home</a></li>
+            <li><a href="construction.html">Accommodation</a></li>
+            <li><a href="construction.html">Horse Riding</a></li>
+            <li><a href="construction.html">Sight Seeing</a></li>
+            <li><a href="register.html">Book</a></li>
+        </ul>
+    </nav>
+
+    <article>
+        <?php
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            echo "<h2>Your Details</h2>";
-            echo "<p><strong>First Name:</strong> " . htmlspecialchars($_POST['firstname']) . "</p>";
-            echo "<p><strong>Last Name:</strong> " . htmlspecialchars($_POST['lastname']) . "</p>";
+            echo "<h2>Booking Confirmation</h2>";
+            echo "<p>Thank you for your booking with Rohirrim Dude Ranch!</p>";
+            
+            echo "<h3>Personal Information</h3>";
+            echo "<p><strong>Name:</strong> " . htmlspecialchars($_POST['firstname']) . " " . htmlspecialchars($_POST['lastname']) . "</p>";
             echo "<p><strong>Age:</strong> " . htmlspecialchars($_POST['age']) . "</p>";
             
             // Species
-            if (isset($_POST['species'])) {
-                $species = $_POST['species'];
-                $speciesName = "";
-                switch ($species) {
-                    case 'M': $speciesName = "Human"; break;
-                    case 'D': $speciesName = "Dwarf"; break;
-                    case 'E': $speciesName = "Elf"; break;
-                    case 'H': $speciesName = "Hobbit"; break;
-                    default: $speciesName = "Unknown";
-                }
-                echo "<p><strong>Species:</strong> $speciesName</p>";
-            }
+            $species = isset($_POST['species']) ? $_POST['species'] : 'M';
+            $speciesNames = [
+                'M' => 'Human',
+                'D' => 'Dwarf',
+                'E' => 'Elf',
+                'H' => 'Hobbit'
+            ];
+            echo "<p><strong>Species:</strong> " . $speciesNames[$species] . "</p>";
             
-            echo "<h2>Your Trip Details</h2>";
+            echo "<h3>Trip Details</h3>";
             
             // Booking options
             $options = [];
@@ -43,34 +51,45 @@
             if (isset($_POST['10day'])) $options[] = "10 Day Tour";
             
             if (!empty($options)) {
-                echo "<p><strong>Booking Options:</strong> " . implode(", ", $options) . "</p>";
+                echo "<p><strong>Options Selected:</strong><br>" . implode("<br>", $options) . "</p>";
             } else {
-                echo "<p><strong>Booking Options:</strong> None selected</p>";
+                echo "<p><strong>No tour options selected</strong></p>";
             }
             
             // Food preferences
-            if (isset($_POST['food'])) {
-                $food = htmlspecialchars($_POST['food']);
-                $foodName = "";
-                switch ($food) {
-                    case 'none': $foodName = "None"; break;
-                    case 'lembas': $foodName = "Lembas"; break;
-                    case 'mushrooms': $foodName = "Mushrooms"; break;
-                    case 'ent': $foodName = "Ent Draft"; break;
-                    case 'cram': $foodName = "Cram"; break;
-                    default: $foodName = "Unknown";
-                }
-                echo "<p><strong>Menu Preferences:</strong> $foodName</p>";
-            }
+            $food = isset($_POST['food']) ? $_POST['food'] : 'none';
+            $foodNames = [
+                'none' => 'None',
+                'lembas' => 'Lembas',
+                'mushrooms' => 'Mushrooms',
+                'ent' => 'Ent Draft',
+                'cram' => 'Cram'
+            ];
+            echo "<p><strong>Menu Preference:</strong> " . $foodNames[$food] . "</p>";
             
             // Date and party size
-            echo "<p><strong>Date:</strong> " . (isset($_POST['bookday']) ? htmlspecialchars($_POST['bookday']) : "Not specified") . "</p>";
-            echo "<p><strong>Number of Travellers:</strong> " . (isset($_POST['partysize']) ? htmlspecialchars($_POST['partysize']) : "Not specified") . "</p>";
+            echo "<p><strong>Arrival Date:</strong> " . htmlspecialchars($_POST['bookday']) . "</p>";
+            echo "<p><strong>Number of Travellers:</strong> " . htmlspecialchars($_POST['partysize']) . "</p>";
             
-            echo "<h3>Thank you for your booking!</h3>";
+            echo "<div class='confirmation'>";
+            echo "<h3>Your booking has been received!</h3>";
+            echo "<p>We'll contact you soon with more details about your adventure in Rohan.</p>";
+            echo "</div>";
         } else {
-            echo "<p>No form data was submitted. Please go back to the <a href='register.html'>booking form</a>.</p>";
+            echo "<div class='error'>";
+            echo "<h3>No booking data received</h3>";
+            echo "<p>Please go back to our <a href='register.html'>booking form</a> to make your reservation.</p>";
+            echo "</div>";
         }
         ?>
+    </article>
+
+    <footer>
+        <div>
+            <h1 class="fineprint">Conditions Apply</h1>
+            <p class="fineprint">Rohirrim Dude Ranch management takes no responsiblity for any injury, beheadings, spells (sleeping or otherwise), spider-bites suffered by guests, or for anything whatsoever.</p> 
+        </div>
+        <p id="contact">Any enquiries please email the <a href="mailto:something@something.com">manager</a></p>
+    </footer>
 </body>
 </html>
